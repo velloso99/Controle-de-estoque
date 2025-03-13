@@ -108,5 +108,5 @@ def painel_geral():
     pass
 
 
-
+login()
 root.mainloop()
