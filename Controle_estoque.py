@@ -33,7 +33,70 @@ def abrir_novo_usuario():
         widget.destroy()
     novo_usuario()
 #------------------------------------------------------------------------
+def login():
+    # Verificando login e abrir novo arquivo
+    def verificar_login():
+        
+        global usuario, senha 
+        
+        usuario = e_user.get()
+        senha = e_senha.get()
+        
+        con = sqlite3.connect('database.db')
+        cursor = con.cursor()
+        cursor.execute("SELECT*FROM login WHERE usuario=? AND senha=?", (usuario, senha))
+        resultado = cursor.fetchall()
+        if resultado:
+            for i in range(101):  # De 0 a 100
+                barra['value'] = i  # Atualiza a barra de progresso
+                porcentagem_label.config(text=f"{i}%")  # Atualiza o texto da porcentagem
+                root.update_idletasks()  # Atualiza a interface
+                root.after(5)  # Tempo de espera (20ms)
+            
+            root.destroy()
+            painel_geral()
+            
+        else:
+            messagebox.showerror("Erro", "Usuario ou senha incorretos!")
+        cursor.close()
+        
+    
+        root.destroy() 
+    
+    lbl_status = Label(frame_login, text="", font=('Ivy 15 bold'), bg=co0, fg=co1)
+    lbl_status.place(x=325, y=220)
 
+    l_titulo = Label(frame_login, text="Faça seu login", font=('Ivy 20 bold'), bg=co0, fg=co1)
+    l_titulo.place(x=240, y=15, anchor=CENTER)
+
+    l_user = Label(frame_login, text="Usuario", font=('Ivy 15 bold'), bg=co0, fg=co1)
+    l_user.place(x=240, y=60, anchor=CENTER)
+    e_user= Entry(frame_login, width=25, justify=LEFT, font=('Ivy 15 bold'),  relief='solid')
+    e_user.place(x=250, y=100, anchor=CENTER)
+
+    l_senha =Label(frame_login, text="Senha", font=('Ivy 15 bold'), bg=co0, fg=co1)
+    l_senha.place(x=240, y=140, anchor=CENTER)
+    e_senha= Entry(frame_login, width=25, justify=LEFT, font=('Ivy 15 bold'),show="*",  relief='solid')
+    e_senha.place(x=250, y=180, anchor=CENTER)
+
+    bt_enter = Button(frame_login, command=verificar_login, text="Enter", bd=3, bg=co0, fg=co1, font=('verdana', 11, 'bold'))
+    bt_enter.place(x=45, y=225)
+
+    bt_n_usuario = Button(frame_login, command=abrir_novo_usuario, text="Novo Usuario", bd=3, bg=co0, fg=co1, font=('verdana', 11, 'bold'))
+    bt_n_usuario.place(x=110, y=225)
+    
+    bt_esqueceu = Button(frame_login, command=None , text="Esqueceu a Senha", bd=3, bg=co0, fg=co1, font=('verdana', 11, 'bold'))
+    bt_esqueceu.place(x=240, y=225)
+
+    bt_n_fechar = Button(frame_login, command=root.destroy , text="Fechar", bd=3, bg=co0, fg=co1, font=('verdana', 11, 'bold'))
+    bt_n_fechar.place(x=410, y=225)
+    
+    barra = Progressbar(frame_login, length=250, mode="determinate",style="green.Horizontal.TProgressbar" )
+    barra.place(x=170, y=275)
+    porcentagem_label =Label(frame_login, text="0%", font=("Arial", 12) )
+    porcentagem_label.place(x=120, y=275)
+        
+        
 
 
 
@@ -41,7 +104,8 @@ def abrir_novo_usuario():
 def novo_usuario():
     pass
 
-
+def painel_geral():
+    pass
 
 
 
