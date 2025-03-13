@@ -27,6 +27,19 @@ Style.configure("green.Horizontal.TProgressbar",
 #------------------------------------------------------------------------
 frame_login = Frame(root, width=500, height=300, bg=co0)
 frame_login.grid(row=0 , column=0, sticky=NSEW)
+#-----------------------------------------------------------------------
+def abrir_novo_usuario():
+    for widget in frame_login.winfo_children():
+        widget.destroy()
+    novo_usuario()
+#------------------------------------------------------------------------
+
+
+
+
+
+def novo_usuario():
+    pass
 
 
 
