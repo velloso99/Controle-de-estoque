@@ -19,8 +19,11 @@ pos_y = (altura_tela - altura_root)//2
 # Definir geometria da janela (LxA+X+Y)
 root.geometry(f"{largura_root}x{altura_root}+{pos_x}+{pos_y}")
 
-
-
+Style = Style(root)
+Style.theme_use("clam")
+Style.configure("green.Horizontal.TProgressbar", 
+                foreground="green", 
+                background="green")
 
 
 
