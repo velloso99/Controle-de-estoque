@@ -24,7 +24,9 @@ Style.theme_use("clam")
 Style.configure("green.Horizontal.TProgressbar", 
                 foreground="green", 
                 background="green")
-
+#------------------------------------------------------------------------
+frame_login = Frame(root, width=500, height=300, bg=co0)
+frame_login.grid(row=0 , column=0, sticky=NSEW)
 
 
 
