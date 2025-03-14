@@ -7,7 +7,7 @@ root.title("Controle de Estoque")
 root.geometry("500x300")
 root.configure(background=co0)
 root.resizable(width=False, height=False)
-#root.overrideredirect(1)
+root.overrideredirect(1)
 largura_root = 500
 altura_root = 300
 #obter tamanho da tela
