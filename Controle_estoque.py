@@ -32,7 +32,6 @@ def abrir_novo_usuario():
     for widget in frame_login.winfo_children():
         widget.destroy()
     novo_usuario()
-    
 
 #------------------------------------------------------------------------
 def login():
@@ -313,57 +312,58 @@ def esqueceu_senha():
     l_titulo = Label(root1, text="Selecione o usuario na tabela, \n após o usuario selecionado, \n  clique no botão atualizar", font=('Ivy 10 bold'), bg=co0, fg=co1)
     l_titulo.place(x=175, y=370, anchor=CENTER)
 #------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
 def painel_geral():
     
-   
-    
+
     global root
     
     #Criar uma nova janela
-    root = Toplevel(root) 
-    root.title("Atulizar Senha")
-    root.geometry("900x900")
-    menubar = tk.Menu(root)  # Define the menubar
-    root.config(menu=menubar)  # Attach the menubar to the root window
+    painel = Toplevel(root) 
+    painel.title("Painel de Controle")
+    painel.geometry("900x900")
+    menubar = tk.Menu(painel)  # Define the menubar
+    painel.config(menu=menubar)  # Attach the menubar to the root window
     #root.overrideredirect(1) 
-    root.configure(background=co0)
-    root.resizable(width=False, height=False)
+    painel.configure(background=co0)
+    painel.resizable(width=False, height=False)
     largura_root = 900
     altura_root = 900
     #obter tamanho da tela
-    largura_tela = root.winfo_screenwidth()
-    altura_tela = root.winfo_screenheight()
+    largura_tela = painel.winfo_screenwidth()
+    altura_tela = painel.winfo_screenheight()
     # Calcular posição para centralizar
     pos_x = ( largura_tela-largura_root )//2
     pos_y = (altura_tela - altura_root)//2
     # Definir geometria da janela (LxA+X+Y)
-    root.geometry(f"{largura_root}x{altura_root}+{pos_x}+{pos_y}")
+    painel.geometry(f"{largura_root}x{altura_root}+{pos_x}+{pos_y}")
     
-   
-    
-    def abrir_atualização():
+    def abrir_atualizacao():
         for widget in frame_painel.winfo_children():
          widget.destroy()
         atulizar()
+    def abrir_relatorios():
+        for widget in frame_painel.winfo_children():
+            widget.destroy()
+        relatorio() 
     
-    estoque = tk.Menu(menubar, tearoff= 0)
-    menubar.add_cascade(label = "Estoque", menu=estoque)
-    estoque.add_command(label="Cadastrar  Produto", command= None)
-    estoque.add_command(label="Cadastrar  Fornecedores", command= None)
+   
+    # Menu Estoque
+    estoque = tk.Menu(menubar, tearoff=0)
+    menubar.add_cascade(label="Estoque", menu=estoque)
+    estoque.add_command(label="Cadastrar Produto", command=None)
+    estoque.add_command(label="Cadastrar Fornecedores", command=None)
     estoque.add_separator()
-    estoque.add_cascade(label="Sair", command=root.destroy)
+    estoque.add_command(label="Sair", command=root.destroy)  # Corrigido de add_cascade para add_command
 
-    relatórios = tk.Menu(menubar, tearoff=0)
-    menubar.add_cascade(label = "Relatórios", menu=relatórios)
-    intsubmenu = tk.Menu(relatórios, tearoff=0)
-    relatórios.add_cascade(label="Relatório Estoque",menu=intsubmenu )
-    intsubmenu.add_command(label="Relatório", command=None)
+    # Menu Relatórios
+    relatorios = tk.Menu(menubar, tearoff=0)
+    menubar.add_cascade(label="Relatórios", menu=relatorios)
+    relatorios.add_command(label="Gerar Relatórios", command=abrir_relatorios)  # Corrigido add_cascade para add_command
 
-    atualizar = tk.Menu(menubar, tearoff= 0)
-    menubar.add_cascade(label = "Configurações", menu= atualizar)
-    atualizar.add_command(label="Atulizar o software", command=abrir_atualização)
+    # Menu Configurações
+    configuracoes = tk.Menu(menubar, tearoff=0)
+    menubar.add_cascade(label="Configurações", menu=configuracoes)
+    configuracoes.add_command(label="Atualizar o software", command=abrir_atualizacao)  # Corrigido "Atulizar" para "Atualizar"
     
     frame_painel = Frame(root, width=900, height=900, bg=co0 )
     frame_painel.place(x=0, y=0)
@@ -376,6 +376,9 @@ def painel_geral():
 
     p_titulo = Label(frame_painel, text="Criado e desenvolvido por: VellosoDev. ", font=('Ivy 10 '), bg=co0, fg=co1)
     p_titulo.place(x=450, y=600, anchor=CENTER)
+    
+    
+
     
     def atulizar():
         
@@ -415,7 +418,7 @@ def painel_geral():
                             arquivo.write(chunk)
                             baixado += len(chunk)
                             progress_bar["value"] = (baixado / total) * 100
-                            root.update_idletasks()
+                            painel.update_idletasks()
         
                 label_status.config(text=f"Download concluído! Arquivo salvo em {arquivo_destino}")
             except requests.exceptions.RequestException as e:
@@ -426,17 +429,101 @@ def painel_geral():
                 return "2.0"  # Simulação; implemente uma lógica real
 
         # Elementos da interface
-        label_status = tk.Label(root, text="Status: Aguardando...")
+        label_status = tk.Label(painel, text="Status: Aguardando...")
         label_status.pack(pady=10)
 
-        btn_verificar = ttk.Button(root, text="Verificar Atualização", command=verificar_atualizacao)
+        btn_verificar = ttk.Button(painel, text="Verificar Atualização", command=verificar_atualizacao)
         btn_verificar.pack(pady=5)
 
-        btn_atualizar = ttk.Button(root, text="Fazer download agora", command=baixar_atualizacao, state="disabled")
+        btn_atualizar = ttk.Button(painel, text="Fazer download agora", command=baixar_atualizacao, state="disabled")
         btn_atualizar.pack(pady=5)
 
-        progress_bar = ttk.Progressbar(root, mode="determinate")
+        progress_bar = ttk.Progressbar(painel, mode="determinate")
         progress_bar.pack(pady=10)
+        
+ 
+       
+    def relatorio():
+        
+        
+    
+        frame_p = Frame(frame_painel, width=900, height=900, bg=co0 )
+        frame_p.place(x=0, y=0)
+    
+        # Definir a tabela (treeview)
+        tree = ttk.Treeview(frame_p, columns=("Produto", "Quantidade", "Categoria", "valor_total_Produto"), show="headings")
+        tree.heading("Produto", text="Produto")
+        tree.heading("Quantidade", text="Quantidade")
+        tree.heading("Categoria", text="Categoria")
+        tree.pack()
+
+        # Função para exibir o relatório
+        def gerar_relatorio():
+            conn = sqlite3.connect("database.db")
+            cursor = conn.cursor()
+            cursor.execute("SELECT produto, quantidade, categoria, valor_total_Produto FROM estoque")
+            resultados = cursor.fetchall()
+            conn.close()
+
+            # Limpar a tabela antes de inserir novos dados
+            for row in tree.get_children():
+                tree.delete(row)
+
+            # Inserir dados na tabela
+            for produto, quantidade, categoria, valor_total_Produto  in resultados:
+                tree.insert("", "end", values=(produto, quantidade, categoria, valor_total_Produto))
+
+        # Função para gerar o gráfico
+        def gerar_grafico():
+            conn = sqlite3.connect("database.db")
+            cursor = conn.cursor()
+            cursor.execute("SELECT produto, quantidade, valor_total_Produto FROM estoque")
+            resultados = cursor.fetchall()
+            conn.close()
+
+            if resultados:
+                produtos = [row[0] for row in resultados]
+                quantidades = [row[1] for row in resultados]
+
+                # Criar o gráfico
+                fig, ax = plt.subplots()
+                ax.bar(produtos, quantidades, color="lightblue")
+                ax.set_title("Estoque de Produtos")
+                ax.set_xlabel("Produtos")
+                ax.set_ylabel("Quantidade")
+
+                # Exibir o gráfico no Tkinter
+                canvas = FigureCanvasTkAgg(fig, master=frame_p)
+                canvas.get_tk_widget().pack()
+                canvas.draw()
+            else:
+             messagebox.showinfo("Informação", "Nenhum dado disponível para gerar o gráfico.")
+
+            # Frame para o relatório
+            columns = ("Produto", "Quantidade", "Categoria", "valor total Produto")
+            tree = ttk.Treeview(frame_p, columns=columns, show="headings")
+            tree.heading("Produto", text="Produto")
+            tree.heading("Quantidade", text="Quantidade")
+            tree.heading("Categoria", text="Categoria")
+            tree.heading("valor total Produto", text="valor total Produto")
+            tree.pack(fill="both", expand=True)
+    
+        def executar_tarefas():
+            gerar_relatorio()
+            gerar_grafico()
+
+        # Criando um botão unificado
+        btn_unificado = ttk.Button(frame_p, text="Gerar Tudo", command=executar_tarefas)
+        btn_unificado.pack(pady=10)
+    
+    
+    
+     
+    
+    
+    
+    
+    
        
  
 
