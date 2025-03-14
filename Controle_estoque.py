@@ -316,11 +316,15 @@ def esqueceu_senha():
 
 
 def painel_geral():
+    
     global root
+    
     #Criar uma nova janela
     root = Toplevel(root) 
     root.title("Atulizar Senha")
     root.geometry("900x900")
+    menubar = tk.Menu(root)  # Define the menubar
+    root.config(menu=menubar)  # Attach the menubar to the root window
     #root.overrideredirect(1) 
     root.configure(background=co0)
     root.resizable(width=False, height=False)
@@ -334,6 +338,105 @@ def painel_geral():
     pos_y = (altura_tela - altura_root)//2
     # Definir geometria da janela (LxA+X+Y)
     root.geometry(f"{largura_root}x{altura_root}+{pos_x}+{pos_y}")
+    
+   
+    
+    def abrir_atualização():
+        for widget in frame_painel.winfo_children():
+         widget.destroy()
+    atulizar()
+    
+    estoque = tk.Menu(menubar, tearoff= 0)
+    menubar.add_cascade(label = "Estoque", menu=estoque)
+    estoque.add_command(label="Cadastrar  Produto", command= None)
+    estoque.add_command(label="Cadastrar  Fornecedores", command= None)
+    estoque.add_separator()
+    estoque.add_cascade(label="Sair", command=root.destroy)
+
+    relatórios = tk.Menu(menubar, tearoff=0)
+    menubar.add_cascade(label = "Relatórios", menu=relatórios)
+    intsubmenu = tk.Menu(relatórios, tearoff=0)
+    relatórios.add_cascade(label="Relatório Estoque",menu=intsubmenu )
+    intsubmenu.add_command(label="Relatório", command=None)
+
+    atualizar = tk.Menu(menubar, tearoff= 0)
+    menubar.add_cascade(label = "Configurações", menu= atualizar)
+    atualizar.add_command(label="Atulizar o software", command=abrir_atualização)
+    
+    frame_painel = Frame(root, width=900, height=900, bg=co0 )
+    frame_painel.place(x=0, y=0)
+
+    p_titulo = Label(frame_painel, text="Cadastro de Estoque ", font=('Ivy 20 bold'), bg=co0, fg=co1)
+    p_titulo.place(x=450, y=400, anchor=CENTER)
+
+    p_titulo = Label(frame_painel, text="Software destinado para  estoque.", font=('Ivy 10 '), bg=co0, fg=co1)
+    p_titulo.place(x=450, y=500, anchor=CENTER)
+
+    p_titulo = Label(frame_painel, text="Criado e desenvolvido por: VellosoDev. ", font=('Ivy 10 '), bg=co0, fg=co1)
+    p_titulo.place(x=450, y=600, anchor=CENTER)
+    
+    def atulizar():
+    
+    # Função para verificar a atualização
+        def verificar_atualizacao():
+            label_status.config(text="Verificando por atualizações...")
+            versao_atual = "1.0"  # Versão local (simulação)
+            versao_remota = obter_versao_remota()  # Obtenha a versão remota
+            if versao_remota > versao_atual:
+                label_status.config(text=f"Nova versão {versao_remota} disponível! Clique em 'Atualizar'.")
+                btn_atualizar.config(state="normal")
+            else:
+                label_status.config(text="Você já está na versão mais recente.")
+                btn_atualizar.config(state="disabled")
+
+        # Função para baixar a atualização e salvar na pasta de Downloads
+        def baixar_atualizacao():
+            url = "https://mega.nz/folder/7hgAxZ7I#SdwQCdwdDCrC80NQ3llQ5g"  # Insira aqui o URL real
+            label_status.config(text="Baixando atualização...")
+            btn_atualizar.config(state="disabled")
+    
+            try:
+                # Caminho para a pasta Downloads
+                pasta_downloads = Path(os.path.expanduser("~/Downloads"))
+                arquivo_destino = pasta_downloads / "arquivo_atualizacao.exe"
+
+                response = requests.get(url, stream=True)
+                response.raise_for_status()  # Levanta exceção para erros HTTP
+                total = int(response.headers.get('content-length', 0))
+        
+                # Escrevendo o arquivo enquanto atualiza o progresso
+                with open(arquivo_destino, "wb") as arquivo:
+                    baixado = 0
+                    for chunk in response.iter_content(chunk_size=1024):
+                        if chunk:
+                            arquivo.write(chunk)
+                            baixado += len(chunk)
+                            progress_bar["value"] = (baixado / total) * 100
+                            root.update_idletasks()
+        
+                label_status.config(text=f"Download concluído! Arquivo salvo em {arquivo_destino}")
+            except requests.exceptions.RequestException as e:
+                label_status.config(text=f"Erro no download: {e}")
+
+        # Função para obter a versão remota (a lógica pode ser ajustada para APIs)
+        def obter_versao_remota():
+            return "2.0"  # Simulação; implemente uma lógica real
+
+   
+
+        # Elementos da interface
+        label_status = tk.Label(root, text="Status: Aguardando...")
+        label_status.pack(pady=10)
+
+        btn_verificar = ttk.Button(root, text="Verificar Atualização", command=verificar_atualizacao)
+        btn_verificar.pack(pady=5)
+
+        btn_atualizar = ttk.Button(root, text="Fazer download agora", command=baixar_atualizacao, state="disabled")
+        btn_atualizar.pack(pady=5)
+
+        progress_bar = ttk.Progressbar(root, mode="determinate")
+        progress_bar.pack(pady=10)
+    
     
 
 
