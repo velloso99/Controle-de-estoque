@@ -130,29 +130,29 @@ def novo_usuario():
         e_senha.delete(0, END)
         
         
-        barra = ttk.Progressbar(frame_n_senha, length=250, mode="determinate",style="green.Horizontal.TProgressbar")
-        barra.place(x=170, y=275)
-        porcentagem_label = tk.Label(frame_n_senha, text="0%")
-        porcentagem_label.place(x=120, y=275)
+    barra = ttk.Progressbar(frame_n_senha, length=250, mode="determinate",style="green.Horizontal.TProgressbar")
+    barra.place(x=170, y=275)
+    porcentagem_label = tk.Label(frame_n_senha, text="0%")
+    porcentagem_label.place(x=120, y=275)
     
-        l_titulo = Label(frame_n_senha, text="Cadastrar um novo usuario", font=('Ivy 20 bold'), bg=co0, fg=co1)
-        l_titulo.place(x=230, y=15, anchor=CENTER)
+    l_titulo = Label(frame_n_senha, text="Cadastrar um novo usuario", font=('Ivy 20 bold'), bg=co0, fg=co1)
+    l_titulo.place(x=230, y=15, anchor=CENTER)
     
-        l_user = Label(frame_n_senha, text="Usuario", font=('Ivy 15 bold'), bg=co0, fg=co1)
-        l_user.place(x=240, y=60, anchor=CENTER)
-        e_user= Entry(frame_n_senha, width=25, justify=LEFT, font=('Ivy 15 bold'),  relief='solid')
-        e_user.place(x=250, y=100, anchor=CENTER)
+    l_user = Label(frame_n_senha, text="Usuario", font=('Ivy 15 bold'), bg=co0, fg=co1)
+    l_user.place(x=240, y=60, anchor=CENTER)
+    e_user= Entry(frame_n_senha, width=25, justify=LEFT, font=('Ivy 15 bold'),  relief='solid')
+    e_user.place(x=250, y=100, anchor=CENTER)
 
-        l_senha =Label(frame_n_senha, text="Senha", font=('Ivy 15 bold'), bg=co0, fg=co1)
-        l_senha.place(x=240, y=140, anchor=CENTER)
-        e_senha= Entry(frame_n_senha, width=25, justify=LEFT, font=('Ivy 15 bold'),show="*",  relief='solid')
-        e_senha.place(x=250, y=180, anchor=CENTER)
+    l_senha =Label(frame_n_senha, text="Senha", font=('Ivy 15 bold'), bg=co0, fg=co1)
+    l_senha.place(x=240, y=140, anchor=CENTER)
+    e_senha= Entry(frame_n_senha, width=25, justify=LEFT, font=('Ivy 15 bold'),show="*",  relief='solid')
+    e_senha.place(x=250, y=180, anchor=CENTER)
 
-        bt_enter = Button(frame_n_senha, command=cadastrar_usuario, text="Enter", bd=3, bg=co0, fg=co1, font=('verdana', 11, 'bold'))
-        bt_enter.place(x=105, y=225)
-
-        bt_fechar = Button(frame_n_senha, command=root.destroy, text="Atualizar", bd=3, bg=co0, fg=co1, font=('verdana', 11, 'bold'))
-        bt_fechar.place(x=200, y=225)
+    bt_enter = Button(frame_n_senha, command=cadastrar_usuario, text="Enter", bd=3, bg=co0, fg=co1, font=('verdana', 11, 'bold'))
+    bt_enter.place(x=105, y=225)
+    
+    bt_fechar = Button(frame_n_senha, command=root.destroy, text="Atualizar", bd=3, bg=co0, fg=co1, font=('verdana', 11, 'bold'))
+    bt_fechar.place(x=200, y=225)
         
         
         
