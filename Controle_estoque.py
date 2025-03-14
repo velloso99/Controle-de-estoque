@@ -312,6 +312,7 @@ def esqueceu_senha():
     l_titulo = Label(root1, text="Selecione o usuario na tabela, \n após o usuario selecionado, \n  clique no botão atualizar", font=('Ivy 10 bold'), bg=co0, fg=co1)
     l_titulo.place(x=175, y=370, anchor=CENTER)
 #------------------------------------------------------------------------------------------------------------------------------------------------------
+    
 def painel_geral():
     
 
@@ -341,11 +342,6 @@ def painel_geral():
         for widget in frame_painel.winfo_children():
          widget.destroy()
         atulizar()
-    def abrir_relatorios():
-        for widget in frame_painel.winfo_children():
-            widget.destroy()
-        relatorio() 
-    
    
     # Menu Estoque
     estoque = tk.Menu(menubar, tearoff=0)
@@ -358,7 +354,7 @@ def painel_geral():
     # Menu Relatórios
     relatorios = tk.Menu(menubar, tearoff=0)
     menubar.add_cascade(label="Relatórios", menu=relatorios)
-    relatorios.add_command(label="Gerar Relatórios", command=abrir_relatorios)  # Corrigido add_cascade para add_command
+    relatorios.add_command(label="Gerar Relatórios", command=relatorio)  # Corrigido add_cascade para add_command
 
     # Menu Configurações
     configuracoes = tk.Menu(menubar, tearoff=0)
@@ -367,7 +363,7 @@ def painel_geral():
     
     frame_painel = Frame(root, width=900, height=900, bg=co0 )
     frame_painel.place(x=0, y=0)
-
+    
     p_titulo = Label(frame_painel, text="Cadastro de Estoque ", font=('Ivy 20 bold'), bg=co0, fg=co1)
     p_titulo.place(x=450, y=400, anchor=CENTER)
 
@@ -376,10 +372,7 @@ def painel_geral():
 
     p_titulo = Label(frame_painel, text="Criado e desenvolvido por: VellosoDev. ", font=('Ivy 10 '), bg=co0, fg=co1)
     p_titulo.place(x=450, y=600, anchor=CENTER)
-    
-    
 
-    
     def atulizar():
         
         # Função para verificar a atualização
@@ -443,78 +436,101 @@ def painel_geral():
         
  
        
-    def relatorio():
-        
-        
+def relatorio():
     
-        frame_p = Frame(frame_painel, width=900, height=900, bg=co0 )
-        frame_p.place(x=0, y=0)
     
-        # Definir a tabela (treeview)
-        tree = ttk.Treeview(frame_p, columns=("Produto", "Quantidade", "Categoria", "valor_total_Produto"), show="headings")
+    #Criar uma nova janela
+    painel = Toplevel(root) 
+    painel.title("Painel de Controle")
+    painel.geometry("900x900")
+    menubar = tk.Menu(painel)  # Define the menubar
+    painel.config(menu=menubar)  # Attach the menubar to the root window
+    #root.overrideredirect(1) 
+    painel.configure(background=co0)
+    painel.resizable(width=False, height=False)
+    largura_root = 900
+    altura_root = 900
+    #obter tamanho da tela
+    largura_tela = painel.winfo_screenwidth()
+    altura_tela = painel.winfo_screenheight()
+    # Calcular posição para centralizar
+    pos_x = ( largura_tela-largura_root )//2
+    pos_y = (altura_tela - altura_root)//2
+    # Definir geometria da janela (LxA+X+Y)
+    painel.geometry(f"{largura_root}x{altura_root}+{pos_x}+{pos_y}")
+    
+    # Definir a tabela (treeview)
+    tree = ttk.Treeview(painel, columns=("Produto", "Quantidade", "Categoria", "valor_total_Produto"), show="headings")
+    tree.heading("Produto", text="Produto")
+    tree.heading("Quantidade", text="Quantidade")
+    tree.heading("Categoria", text="Categoria")
+    tree.pack()
+
+    # Função para exibir o relatório
+    def gerar_relatorio():
+        conn = sqlite3.connect("database.db")
+        cursor = conn.cursor()
+        cursor.execute("SELECT produto, quantidade, categoria, valor_total_Produto FROM estoque")
+        resultados = cursor.fetchall()
+        conn.close()
+
+        # Limpar a tabela antes de inserir novos dados
+        for row in tree.get_children():
+            tree.delete(row)
+
+        # Inserir dados na tabela
+        for produto, quantidade, categoria, valor_total_Produto  in resultados:
+            tree.insert("", "end", values=(produto, quantidade, categoria, valor_total_Produto))
+
+    # Função para gerar o gráfico
+    def gerar_grafico():
+        conn = sqlite3.connect("database.db")
+        cursor = conn.cursor()
+        cursor.execute("SELECT produto, quantidade, valor_total_Produto FROM estoque")
+        resultados = cursor.fetchall()
+        conn.close()
+
+        if resultados:
+            produtos = [row[0] for row in resultados]
+            quantidades = [row[1] for row in resultados]
+
+            # Criar o gráfico
+            fig, ax = plt.subplots()
+            ax.bar(produtos, quantidades, color="lightblue")
+            ax.set_title("Estoque de Produtos")
+            ax.set_xlabel("Produtos")
+            ax.set_ylabel("Quantidade")
+
+            # Exibir o gráfico no Tkinter
+            canvas = FigureCanvasTkAgg(fig, master=painel)
+            canvas.get_tk_widget().pack()
+            canvas.draw()
+        else:
+            messagebox.showinfo("Informação", "Nenhum dado disponível para gerar o gráfico.")
+
+        # Frame para o relatório
+        columns = ("Produto", "Quantidade", "Categoria", "valor total Produto")
+        tree = ttk.Treeview(painel, columns=columns, show="headings")
         tree.heading("Produto", text="Produto")
         tree.heading("Quantidade", text="Quantidade")
         tree.heading("Categoria", text="Categoria")
-        tree.pack()
-
-        # Função para exibir o relatório
-        def gerar_relatorio():
-            conn = sqlite3.connect("database.db")
-            cursor = conn.cursor()
-            cursor.execute("SELECT produto, quantidade, categoria, valor_total_Produto FROM estoque")
-            resultados = cursor.fetchall()
-            conn.close()
-
-            # Limpar a tabela antes de inserir novos dados
-            for row in tree.get_children():
-                tree.delete(row)
-
-            # Inserir dados na tabela
-            for produto, quantidade, categoria, valor_total_Produto  in resultados:
-                tree.insert("", "end", values=(produto, quantidade, categoria, valor_total_Produto))
-
-        # Função para gerar o gráfico
-        def gerar_grafico():
-            conn = sqlite3.connect("database.db")
-            cursor = conn.cursor()
-            cursor.execute("SELECT produto, quantidade, valor_total_Produto FROM estoque")
-            resultados = cursor.fetchall()
-            conn.close()
-
-            if resultados:
-                produtos = [row[0] for row in resultados]
-                quantidades = [row[1] for row in resultados]
-
-                # Criar o gráfico
-                fig, ax = plt.subplots()
-                ax.bar(produtos, quantidades, color="lightblue")
-                ax.set_title("Estoque de Produtos")
-                ax.set_xlabel("Produtos")
-                ax.set_ylabel("Quantidade")
-
-                # Exibir o gráfico no Tkinter
-                canvas = FigureCanvasTkAgg(fig, master=frame_p)
-                canvas.get_tk_widget().pack()
-                canvas.draw()
-            else:
-             messagebox.showinfo("Informação", "Nenhum dado disponível para gerar o gráfico.")
-
-            # Frame para o relatório
-            columns = ("Produto", "Quantidade", "Categoria", "valor total Produto")
-            tree = ttk.Treeview(frame_p, columns=columns, show="headings")
-            tree.heading("Produto", text="Produto")
-            tree.heading("Quantidade", text="Quantidade")
-            tree.heading("Categoria", text="Categoria")
-            tree.heading("valor total Produto", text="valor total Produto")
-            tree.pack(fill="both", expand=True)
+        tree.heading("valor total Produto", text="valor total Produto")
+        tree.pack(fill="both", expand=True)
     
-        def executar_tarefas():
-            gerar_relatorio()
-            gerar_grafico()
+    def executar_tarefas():
+        gerar_relatorio()
+        gerar_grafico()
 
-        # Criando um botão unificado
-        btn_unificado = ttk.Button(frame_p, text="Gerar Tudo", command=executar_tarefas)
-        btn_unificado.pack(pady=10)
+    # Criando um botão unificado
+    btn_unificado = ttk.Button(painel, text="Gerar Tudo", command=executar_tarefas)
+    btn_unificado.pack(pady=10)
+        
+    
+        
+
+   
+
+    
     
     
     
