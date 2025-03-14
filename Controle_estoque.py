@@ -310,33 +310,17 @@ def esqueceu_senha():
 
     l_titulo = Label(root1, text="Selecione o usuario na tabela, \n após o usuario selecionado, \n  clique no botão atualizar", font=('Ivy 10 bold'), bg=co0, fg=co1)
     l_titulo.place(x=175, y=370, anchor=CENTER)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 def painel_geral():
-    pass
+    
+    #Criar uma nova janela
+    root2 = Toplevel(root) 
+    root2.title("Atulizar Senha")
+    root2.geometry("900x900")
+    #root.overrideredirect(1)   
+    
 
 
 login()
