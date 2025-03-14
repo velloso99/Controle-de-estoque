@@ -32,8 +32,11 @@ def abrir_novo_usuario():
     for widget in frame_login.winfo_children():
         widget.destroy()
     novo_usuario()
+    
+
 #------------------------------------------------------------------------
 def login():
+    global root
     # Verificando login e abrir novo arquivo
     def verificar_login():
         
@@ -52,13 +55,12 @@ def login():
                 porcentagem_label.config(text=f"{i}%")  # Atualiza o texto da porcentagem
                 root.update_idletasks()  # Atualiza a interface
                 root.after(5)  # Tempo de espera (20ms)
-            root.destroy()
             painel_geral()
+             
         else:
             messagebox.showerror("Erro", "Usuario ou senha incorretos!")
         cursor.close()
-        root.destroy() 
-    
+        
     lbl_status = Label(frame_login, text="", font=('Ivy 15 bold'), bg=co0, fg=co1)
     lbl_status.place(x=325, y=220)
 
@@ -314,12 +316,24 @@ def esqueceu_senha():
 
 
 def painel_geral():
-    
+    global root
     #Criar uma nova janela
-    root2 = Toplevel(root) 
-    root2.title("Atulizar Senha")
-    root2.geometry("900x900")
-    #root.overrideredirect(1)   
+    root = Toplevel(root) 
+    root.title("Atulizar Senha")
+    root.geometry("900x900")
+    #root.overrideredirect(1) 
+    root.configure(background=co0)
+    root.resizable(width=False, height=False)
+    largura_root = 900
+    altura_root = 900
+    #obter tamanho da tela
+    largura_tela = root.winfo_screenwidth()
+    altura_tela = root.winfo_screenheight()
+    # Calcular posição para centralizar
+    pos_x = ( largura_tela-largura_root )//2
+    pos_y = (altura_tela - altura_root)//2
+    # Definir geometria da janela (LxA+X+Y)
+    root.geometry(f"{largura_root}x{altura_root}+{pos_x}+{pos_y}")
     
 
 
