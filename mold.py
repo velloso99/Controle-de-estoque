@@ -31,4 +31,9 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import datetime
 import zipfile
 import sys
-
+import gdown  # Certifique-se de instalar com: pip install gdown
+import zipfile
+import os
+import shutil
+from pathlib import Path
+import requests

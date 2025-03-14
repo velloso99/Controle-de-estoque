@@ -317,6 +317,8 @@ def esqueceu_senha():
 
 def painel_geral():
     
+   
+    
     global root
     
     #Criar uma nova janela
@@ -344,7 +346,7 @@ def painel_geral():
     def abrir_atualização():
         for widget in frame_painel.winfo_children():
          widget.destroy()
-    atulizar()
+        atulizar()
     
     estoque = tk.Menu(menubar, tearoff= 0)
     menubar.add_cascade(label = "Estoque", menu=estoque)
@@ -376,9 +378,10 @@ def painel_geral():
     p_titulo.place(x=450, y=600, anchor=CENTER)
     
     def atulizar():
-    
-    # Função para verificar a atualização
+        
+        # Função para verificar a atualização
         def verificar_atualizacao():
+            
             label_status.config(text="Verificando por atualizações...")
             versao_atual = "1.0"  # Versão local (simulação)
             versao_remota = obter_versao_remota()  # Obtenha a versão remota
@@ -388,13 +391,13 @@ def painel_geral():
             else:
                 label_status.config(text="Você já está na versão mais recente.")
                 btn_atualizar.config(state="disabled")
-
+                
         # Função para baixar a atualização e salvar na pasta de Downloads
         def baixar_atualizacao():
             url = "https://mega.nz/folder/7hgAxZ7I#SdwQCdwdDCrC80NQ3llQ5g"  # Insira aqui o URL real
             label_status.config(text="Baixando atualização...")
             btn_atualizar.config(state="disabled")
-    
+            
             try:
                 # Caminho para a pasta Downloads
                 pasta_downloads = Path(os.path.expanduser("~/Downloads"))
@@ -403,7 +406,7 @@ def painel_geral():
                 response = requests.get(url, stream=True)
                 response.raise_for_status()  # Levanta exceção para erros HTTP
                 total = int(response.headers.get('content-length', 0))
-        
+                
                 # Escrevendo o arquivo enquanto atualiza o progresso
                 with open(arquivo_destino, "wb") as arquivo:
                     baixado = 0
@@ -417,12 +420,10 @@ def painel_geral():
                 label_status.config(text=f"Download concluído! Arquivo salvo em {arquivo_destino}")
             except requests.exceptions.RequestException as e:
                 label_status.config(text=f"Erro no download: {e}")
-
-        # Função para obter a versão remota (a lógica pode ser ajustada para APIs)
+                
+                # Função para obter a versão remota (a lógica pode ser ajustada para APIs)
         def obter_versao_remota():
-            return "2.0"  # Simulação; implemente uma lógica real
-
-   
+                return "2.0"  # Simulação; implemente uma lógica real
 
         # Elementos da interface
         label_status = tk.Label(root, text="Status: Aguardando...")
@@ -436,8 +437,8 @@ def painel_geral():
 
         progress_bar = ttk.Progressbar(root, mode="determinate")
         progress_bar.pack(pady=10)
-    
-    
+       
+ 
 
 
 login()
